@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink, Routes, Route, useNavigate,useParams } from 'react-router-dom'
+import { NavLink, Routes, Route, useNavigate,useParams, Navigate} from 'react-router-dom'
 import Articles from './Articles'
 import LoginForm from './LoginForm'
 import Message from './Message'
@@ -32,6 +32,10 @@ export default function App() {
     // and a message saying "Goodbye!" should be set in its proper state.
     // In any case, we should redirect the browser back to the login screen,
     // using the helper above.
+    localStorage.removeItem('token')
+    setMessage("Goodbye!")
+    navigate('/')
+
   }
 
   const login = ({ username, password }) => {
@@ -97,23 +101,24 @@ export default function App() {
     axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
       setArticles(res.data.articles)
       setSpinnerOn(false)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    })  
   }
 
   const updateArticle = ({ article_id, article }) => {
     // ✨ implement
     // You got this!
-    axiosWithAuth().get(`http://localhost:9000/api/articles/${article_id}`)
+    setSpinnerOn(true)
+    axiosWithAuth().put(`http://localhost:9000/api/articles/${article_id}`,article)
     .then(res => {
-      console.log(res)
+      setMessage(res.data.message)
     })
     .catch(err => {
-      console.log(err)
+      console.log('im not working')
     })
-    
+    axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
+      setArticles(res.data.articles)
+      setSpinnerOn(false)
+    })  
   }
   // When the id entered matches the id click it is successful
   const deleteArticle = article_id => {
@@ -133,7 +138,7 @@ export default function App() {
   return (
     // ✨ fix the JSX: `Spinner`, `Message`, `LoginForm`, `ArticleForm` and `Articles` expect props ❗
     <>
-      <Spinner />
+      <Spinner on={spinnerOn}/>
       <Message  message={message}/>
       <button id="logout" onClick={logout}>Logout from app</button>
       <div id="wrapper" style={{ opacity: spinnerOn ? "0.25" : "1" }}> {/* <-- do not change this line */}
@@ -146,7 +151,7 @@ export default function App() {
           <Route path="/" element={<LoginForm navigate={navigate} login={login}/>} />
             <Route path="/articles" element={<PrivateRoute/>}>
             
-              <Route path="/articles" element={<> <ArticleForm postArticle={postArticle} updateArticle={updateArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId} articles={articles}/>
+              <Route path="/articles" element={<> <ArticleForm postArticle={postArticle} updateArticle={updateArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId} articles={articles} setArticles={setArticles} />
               <Articles articles={articles} setArticles={setArticles} getArticles={getArticles} deleteArticle={deleteArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId}/>  </>} />
               </Route>
         </Routes>

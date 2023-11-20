@@ -6,9 +6,9 @@ const initialFormValues = { title: '', text: '', topic: '' }
 
 export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
-  
+  const [isEditing, setIsEditing] = useState(false)
   // ✨ where are my props? Destructure them here
-    const {postArticle,updateArticle, currentArticleId, setCurrentArticleId, articles} = props
+    const {postArticle,updateArticle, currentArticleId, setCurrentArticleId, articles, setArticles} = props
 
     
   
@@ -29,7 +29,8 @@ console.log(currentArticleId)
         })
       }
    })
-    
+     
+ setIsEditing(true)
 
   },[currentArticleId]) 
 
@@ -40,12 +41,23 @@ console.log(currentArticleId)
 
   const onSubmit = evt => {
     evt.preventDefault()
+    
+    if(currentArticleId === null){
+     
+      setValues({
+        title: '',
+        text: '',
+        topic: ''
+      })
     postArticle(values)
-    setValues({
-      title: '',
-      text: '',
-      topic: ''
-    })
+    
+    } else {
+      const data = {article_id: currentArticleId, article:values}
+      updateArticle(data)
+      setIsEditing(false)
+    }
+
+    
     // ✨ implement
     // We must submit a new post or update an existing one,
     // depending on the truthyness of the `currentArticle` prop.
@@ -58,7 +70,15 @@ console.log(currentArticleId)
     const isFormValid = Object.values(values).every((field) => field.trim() !== '');
 
     
-   
+   const clearForm = (evt) => {
+    
+    setValues({
+      title: '',
+      text: '',
+      topic: ''
+    })
+    setIsEditing(false)
+   }
     
     
   
@@ -67,7 +87,7 @@ console.log(currentArticleId)
     // ✨ fix the JSX: make the heading display either "Edit" or "Create"
     // and replace Function.prototype with the correct function
     <form id="form" onSubmit={onSubmit}>
-      <h2>Create Article</h2>
+      <h2> {isEditing ? 'Edit Article' : 'Create Article'} </h2>
       <input
         maxLength={50}
         onChange={onChange}
@@ -89,8 +109,8 @@ console.log(currentArticleId)
         <option value="Node">Node</option>
       </select>
       <div className="button-group">
-        <button disabled={!isFormValid} id="submitArticle">Submit</button>
-        <button onClick={Function.prototype}>Cancel edit</button>
+        <button  type='submit'disabled={!isFormValid} id="submitArticle">Submit</button>
+        <button type='button' onClick={() => clearForm()}>Cancel edit</button>
       </div>
     </form>
   )
