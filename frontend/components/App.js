@@ -18,6 +18,7 @@ export default function App() {
   const [articles, setArticles] = useState([])
   const [currentArticleId, setCurrentArticleId] = useState(null)
   const [spinnerOn, setSpinnerOn] = useState(false)
+  const [disabled, setDisabled] = useState(false)
 
 
 
@@ -151,8 +152,9 @@ export default function App() {
           <Route path="/" element={<LoginForm navigate={navigate} login={login}/>} />
             <Route path="/articles" element={<PrivateRoute/>}>
             
-              <Route path="/articles" element={<> <ArticleForm postArticle={postArticle} updateArticle={updateArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId} articles={articles} setArticles={setArticles} />
-              <Articles articles={articles} setArticles={setArticles} getArticles={getArticles} deleteArticle={deleteArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId}/>  </>} />
+              <Route path="/articles" element={<> <ArticleForm postArticle={postArticle} updateArticle={updateArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId} articles={articles} setArticles={setArticles} disabled={disabled} setDisabled={setDisabled}/>
+
+              <Articles articles={articles} setArticles={setArticles} getArticles={getArticles} deleteArticle={deleteArticle} currentArticleId={currentArticleId} setCurrentArticleId={setCurrentArticleId} disabled={disabled} setDisabled={setDisabled}/> </>} />
               </Route>
         </Routes>
         <footer>Bloom Institute of Technology 2022</footer>

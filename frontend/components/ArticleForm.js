@@ -8,7 +8,7 @@ export default function ArticleForm(props) {
   const [values, setValues] = useState(initialFormValues)
   const [isEditing, setIsEditing] = useState(false)
   // ✨ where are my props? Destructure them here
-    const {postArticle,updateArticle, currentArticleId, setCurrentArticleId, articles, setArticles} = props
+    const {postArticle,updateArticle, currentArticleId, setCurrentArticleId, articles, setArticles,disabled,setDisabled} = props
 
     
   
@@ -42,19 +42,24 @@ console.log(currentArticleId)
   const onSubmit = evt => {
     evt.preventDefault()
     
-    if(currentArticleId === null){
-     
-      setValues({
-        title: '',
-        text: '',
-        topic: ''
-      })
-    postArticle(values)
-    
-    } else {
+    if(isEditing){
       const data = {article_id: currentArticleId, article:values}
       updateArticle(data)
       setIsEditing(false)
+      console.log('updating')
+      setValues({
+        title: "",
+        text: "",
+        topic: ""
+      })
+    } else {
+      postArticle(values)
+      console.log('posting')
+      setValues({
+        title: "",
+        text: "",
+        topic: ""
+      })
     }
 
     
@@ -70,7 +75,7 @@ console.log(currentArticleId)
     const isFormValid = Object.values(values).every((field) => field.trim() !== '');
 
     
-   const clearForm = (evt) => {
+   const clearForm = () => {
     
     setValues({
       title: '',
@@ -78,6 +83,7 @@ console.log(currentArticleId)
       topic: ''
     })
     setIsEditing(false)
+    setDisabled(false)
    }
     
     
@@ -109,8 +115,14 @@ console.log(currentArticleId)
         <option value="Node">Node</option>
       </select>
       <div className="button-group">
-        <button  type='submit'disabled={!isFormValid} id="submitArticle">Submit</button>
+        {isEditing ? (
+          <>
+        <button  type='submit' id="submitArticle"> Submit</button>
         <button type='button' onClick={() => clearForm()}>Cancel edit</button>
+
+        </> ) : (  <button  type='submit'disabled={!isFormValid} id="submitArticle">Submit</button>
+
+        )}
       </div>
     </form>
   )

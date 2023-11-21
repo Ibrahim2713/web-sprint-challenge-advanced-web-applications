@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState} from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import PT from 'prop-types'
 import { axiosWithAuth } from '../axios'
@@ -6,9 +6,9 @@ import { axiosWithAuth } from '../axios'
 
 export default function Articles(props) {
   // ✨ where are my props? Destructure them here
-  const {articles,  getArticles, deleteArticle, currentArticleId, setCurrentArticleId,} = props
+  const {articles,  getArticles, deleteArticle, currentArticleId, setCurrentArticleId,disabled,setDisabled} = props
 
-  
+ 
   // ✨ implement conditional logic: if no token exists
   // we should render a Navigate to login screen (React Router v.6)
 
@@ -23,7 +23,7 @@ export default function Articles(props) {
 
  const handleEdit = (article_id) => {
   setCurrentArticleId(article_id)
-  console.log(article_id)
+  setDisabled(true)
 
   
 
@@ -47,8 +47,8 @@ export default function Articles(props) {
                   <p>Topic: {art.topic}</p>
                 </div>
                 <div>
-                  <button disabled={false} onClick={() => handleEdit(art.article_id)}>Edit</button>
-                  <button disabled={false} onClick={() => deleteArticle(art.article_id)}>Delete</button>
+                  <button disabled={disabled} onClick={() => handleEdit(art.article_id)}> Edit</button>
+                  <button disabled={disabled} onClick={() => deleteArticle(art.article_id)}>Delete</button>
                 </div>
               </div>
             )
