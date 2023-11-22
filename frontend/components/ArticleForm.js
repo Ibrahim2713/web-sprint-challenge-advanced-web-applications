@@ -83,7 +83,7 @@ console.log(currentArticleId)
       topic: ''
     })
     setIsEditing(false)
-    setDisabled(false)
+    setDisabled(false )
    }
     
     

@@ -7,7 +7,7 @@ const PrivateRoute = () => {
    if(localStorage.getItem('token') != null){
     return <Outlet />
    } else {
-        return <Navigate to="/" />
+        return <Navigate to="/" /> 
    }
 
 }

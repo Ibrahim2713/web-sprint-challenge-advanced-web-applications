@@ -92,7 +92,8 @@ export default function App() {
     setSpinnerOn(true)
     axiosWithAuth().post(`http://localhost:9000/api/articles`,article)
     .then(res => {
-      setMessage(res.data.message)  
+      setMessage(res.data.message)
+      
     })
     .catch(err => {
     //  navigate('/')
@@ -111,6 +112,7 @@ export default function App() {
     setSpinnerOn(true)
     axiosWithAuth().put(`http://localhost:9000/api/articles/${article_id}`,article)
     .then(res => {
+      
       setMessage(res.data.message)
     })
     .catch(err => {
