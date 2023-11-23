@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import PT from 'prop-types'
-import { axiosWithAuth } from '../axios'
+
 
 
 export default function Articles(props) {
@@ -15,7 +15,7 @@ export default function Articles(props) {
   useEffect(() => {
     // ✨ grab the articles here, on first render only
   getArticles()
-
+console.log(articles)
 
   
   },[])

@@ -46,7 +46,7 @@ console.log(currentArticleId)
       const data = {article_id: currentArticleId, article:values}
       updateArticle(data)
       setIsEditing(false)
-      console.log('updating')
+      
       setValues({
         title: "",
         text: "",
@@ -54,7 +54,7 @@ console.log(currentArticleId)
       })
     } else {
       postArticle(values)
-      console.log('posting')
+      
       setValues({
         title: "",
         text: "",

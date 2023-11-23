@@ -76,6 +76,7 @@ export default function App() {
       setArticles(res.data.articles)
       setMessage(res.data.message)
       setSpinnerOn(false)
+      
 
     })
     .catch(err => {
@@ -92,18 +93,22 @@ export default function App() {
     setSpinnerOn(true)
     axiosWithAuth().post(`http://localhost:9000/api/articles`,article)
     .then(res => {
+      const updatedArticle = res.data.article
+      console.log(res.data.article)
       setMessage(res.data.message)
+      setSpinnerOn(false)
+      setArticles(prevState => [...prevState, updatedArticle]) 
       
     })
     .catch(err => {
     //  navigate('/')
      //  setSpinnerOn(false)
-     console.log('you suck')
+     console.log('article did not post')
     })
-    axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
+   /* axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
       setArticles(res.data.articles)
       setSpinnerOn(false)
-    })  
+    })  */
   }
 
   const updateArticle = ({ article_id, article }) => {
@@ -112,16 +117,25 @@ export default function App() {
     setSpinnerOn(true)
     axiosWithAuth().put(`http://localhost:9000/api/articles/${article_id}`,article)
     .then(res => {
-      
+      setSpinnerOn(false)
       setMessage(res.data.message)
+
+      const updatedArticle = res.data.article
+      console.log(updatedArticle)
+     
+   setArticles(prev => prev.map(art =>art.article_id === article_id ? updatedArticle : art))
+     
     })
     .catch(err => {
-      console.log('im not working')
+      console.log('article did not update')
     })
-    axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
+    /*axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
+      console.log('Fetching new data')
       setArticles(res.data.articles)
       setSpinnerOn(false)
+      
     })  
+    */
   }
   // When the id entered matches the id click it is successful
   const deleteArticle = article_id => {
@@ -135,7 +149,7 @@ export default function App() {
     })
     axiosWithAuth().get(`http://localhost:9000/api/articles`).then(res => {
       setArticles(res.data.articles)
-  })
+  }) 
   }
 
   return (
